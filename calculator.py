@@ -1,4 +1,7 @@
+"""Session 04 - WSGI Calculator Assignment."""
+
 import traceback
+
 """
 For your homework this week, you'll be creating a wsgi application of
 your own.
@@ -42,6 +45,7 @@ To submit your homework:
 
 """
 
+
 def home():
     """Provide an index page with user instructions."""
     page = """
@@ -81,44 +85,11 @@ def add(*args):
     """Return a STRING with the sum of the arguments."""
     return str(sum(map(float, args)))
 
-# def add(*args):
-#     """Return a STRING with the sum of the arguments."""
-#     # TODO: Fill sum with the correct value, based on the
-#     # args provided.
-#     template = """
-#         <h1>{}</h1>
-#         <p><br /></p>
-#         <a href="/">Back to index</a>
-#     """
-#     try:
-#         total = template.format(str(sum(map(float, args))))
-#     except ValueError:
-#         raise ValueError
-#
-#     return total
-
 
 @decorate_math
 def divide(*args):
     """Return a STRING with the quotient of the arguments."""
-    return str(float(args[0])/float(args[1]))
-
-
-# def divide(*args):
-#     """Return a STRING with the quotient of the arguments."""
-#     template = """
-#         <h1>{}</h1>
-#         <p><br /></p>
-#         <a href="/">Back to index</a>
-#     """
-#     try:
-#         quotient = template.format(str(float(args[0])/float(args[1])))
-#     except ZeroDivisionError:
-#         raise ZeroDivisionError
-#     except ValueError:
-#         raise ValueError
-#
-#     return quotient
+    return str(float(args[0]) / float(args[1]))
 
 
 @decorate_math
@@ -127,40 +98,10 @@ def subtract(*args):
     return str(float(args[0]) - float(args[1]))
 
 
-# def subtract(*args):
-#     """Return a STRING with the diff of the arguments."""
-#     template = """
-#         <h1>{}</h1>
-#         <p><br /></p>
-#         <a href="/">Back to index</a>
-#     """
-#     try:
-#         difference = template.format(str(float(args[0]) - float(args[1])))
-#     except ValueError:
-#         raise ValueError
-#
-#     return difference
-
-
 @decorate_math
 def multiply(*args):
     """Return a STRING with the product of the arguments."""
     return str(float(args[0]) * float(args[1]))
-
-
-# def multiply(*args):
-#     """Return a STRING with the product of the arguments."""
-#     template = """
-#         <h1>{}</h1>
-#         <p><br /></p>
-#         <a href="/">Back to index</a>
-#     """
-#     try:
-#         product = template.format(str(float(args[0]) * float(args[1])))
-#     except ValueError:
-#         raise ValueError
-#
-#     return product
 
 
 def resolve_path(path):
@@ -200,7 +141,6 @@ def application(environ, start_response):
     #
     # TODO (bonus): Add error handling for a user attempting
     # to divide by zero.
-    # pass
     headers = [('Content-type', 'text/html')]
     try:
         path = environ.get('PATH_INFO', None)
@@ -217,6 +157,11 @@ def application(environ, start_response):
         body = "<h1>Can't devide by zero</h1>"
         body += '<p><br /></p>'
         body += '<a href="/">Back to index</a>'
+    except ValueError:
+        status = "500 ValueError"
+        body = "<h1>Try using numbers</h1>"
+        body += '<p><br /></p>'
+        body += '<a href="/">Back to index</a>'
     except Exception:
         status = "500 Internal Server Error"
         body = "<h1>Internal Server Error</h1>"
@@ -230,7 +175,6 @@ def application(environ, start_response):
 if __name__ == '__main__':
     # TODO: Insert the same boilerplate wsgiref simple
     # server creation that you used in the book database.
-    # pass
     from wsgiref.simple_server import make_server
     srv = make_server('localhost', 8080, application)
     srv.serve_forever()
